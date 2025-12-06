@@ -36,7 +36,9 @@ public class ProductoController {
                 .orElseThrow(()-> new RuntimeException("No se encontró el producto con el id: " + id));
 
         producto.setNombre(detalleProducto.getNombre());
-        producto.setPrecio(detalleProducto.getPrecio());
+        producto.setPrecioDolar(detalleProducto.getPrecioDolar());
+        producto.setPrecioSoles(detalleProducto.getPrecioSoles());
+        producto.setDescripcion(detalleProducto.getDescripcion());
 
         return productoRepository.save(producto);
     }

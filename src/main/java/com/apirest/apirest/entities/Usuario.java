@@ -6,29 +6,24 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Producto {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String nombre;
-
-    @Column(name = "precio_soles")
-    private float precioSoles;
-
-    @Column(name = "precio_dolar")
-    private float precioDolar;
-
-    private String descripcion;
+    private String numero;
+    private String correo;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreatedDate
-    @Column(name = "inserted_at",  nullable = false, updatable = false,
+    @Column(name = "inserted_at", updatable = false, nullable = false,
             columnDefinition = "TIMESTAMP(0)")
     private LocalDateTime insertedAt;
 
@@ -50,27 +45,19 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public float getPrecioDolar() {
-        return precioDolar;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setPrecioDolar(float precioDolar) {
-        this.precioDolar = precioDolar;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public float getPrecioSoles() {
-        return precioSoles;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setPrecioSoles(float precioSoles) {
-        this.precioSoles = precioSoles;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }
