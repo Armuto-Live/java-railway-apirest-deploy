@@ -38,6 +38,10 @@ public class Producto {
             columnDefinition = "TIMESTAMP(0)")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private CategoriaEntity categoriaId;
+
     public long getId() {
         return id;
     }
@@ -73,4 +77,8 @@ public class Producto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public CategoriaEntity getCategoria() { return categoriaId; }
+
+    public void setCategoria(CategoriaEntity categoria) { this.categoriaId = categoria; }
 }
