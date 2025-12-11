@@ -1,6 +1,7 @@
 package com.apirest.apirest.controllers;
 import com.apirest.apirest.entities.Producto;
 import com.apirest.apirest.repositories.ProductoRepository;
+import com.apirest.apirest.services.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,44 +12,34 @@ import java.util.List;
 public class ProductoController {
 
     @Autowired
-    private ProductoRepository productoRepository;
+    private final ProductoService productoService;
+
+    public ProductoController(ProductoService productoService){
+        this.productoService = productoService;
+    }
 
     @GetMapping
     public List<Producto> obtenerProductos(){
-        return productoRepository.findAll();
+        return productoService.obtenerProductos();
     }
 
     @GetMapping("/{id}")
     public Producto obtenerProductoId(@PathVariable Long id){
-        return productoRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("No se encontró el producto con el id: " + id));
+        return productoService.obtenerProductoId(id);
     }
 
     @PostMapping
     public Producto crearProducto(@RequestBody Producto producto){
-        return productoRepository.save(producto);
-
+        return productoService.crearProducto(producto);
     }
 
     @PutMapping("/{id}")
     public Producto actualizarProducto(@PathVariable Long id, @RequestBody Producto detalleProducto){
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("No se encontró el producto con el id: " + id));
-
-        producto.setNombre(detalleProducto.getNombre());
-        producto.setPrecioDolar(detalleProducto.getPrecioDolar());
-        producto.setPrecioSoles(detalleProducto.getPrecioSoles());
-        producto.setDescripcion(detalleProducto.getDescripcion());
-
-        return productoRepository.save(producto);
+        return productoService.actualizarProducto(id, detalleProducto);
     }
 
     @DeleteMapping("/{id}")
     public String eliminarProducto(@PathVariable Long id){
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("No se encontró el producto con el id: " + id));
-
-        productoRepository.delete(producto);
-        return "El producto fue eliminado";
+        return productoService.eliminarProducto(id);
     }
 }
