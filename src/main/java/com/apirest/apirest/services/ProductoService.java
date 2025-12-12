@@ -1,7 +1,11 @@
 package com.apirest.apirest.services;
 
+import com.apirest.apirest.dto.ProductoDTO;
+import com.apirest.apirest.entities.CategoriaEntity;
 import com.apirest.apirest.entities.Producto;
+import com.apirest.apirest.repositories.CategoriaRepository;
 import com.apirest.apirest.repositories.ProductoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +21,20 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    public Producto crearProducto(Producto producto){
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    public Producto crearProducto(ProductoDTO productoDTO){
+        CategoriaEntity categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+                .orElseThrow(() -> new RuntimeException("No existe la categoría con id: " + productoDTO.getCategoriaId()));
+
+        Producto producto = new Producto();
+        producto.setNombre(productoDTO.getNombre());
+        producto.setPrecioSoles(productoDTO.getPrecioSoles());
+        producto.setPrecioDolar(productoDTO.getPrecioDolar());
+        producto.setDescripcion(productoDTO.getDescripcion());
+        producto.setCategoria(categoria);
+
         return productoRepository.save(producto);
     }
 
@@ -25,9 +42,15 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
-    public Producto obtenerProductoId(Long id){
-        return productoRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("No se encontró el producto con el id: " + id));
+    public ProductoDTO obtenerProductoId(Long id){
+        final Optional<Producto> productoEncontrado = productoRepository.findById(id);
+        if (productoEncontrado.isEmpty()){
+            throw new EntityNotFoundException("Usuario con id " + id + " no encontrado");
+        }
+
+        final Producto productoDB = productoEncontrado.get();
+        return new ProductoDTO(productoDB.getNombre(), productoDB.getPrecioSoles(), productoDB.getPrecioDolar(), productoDB.getDescripcion(), productoDB.getCategoria().getId());
+
     }
 
     public Producto actualizarProducto(Long id, Producto detalleProducto){

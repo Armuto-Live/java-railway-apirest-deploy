@@ -9,9 +9,9 @@ public class ProductoDTO implements Serializable {
     final float precioSoles;
     final float precioDolar;
     final String descripcion;
-    final CategoriaEntity categoriaId;
+    final Long categoriaId;
 
-    public ProductoDTO(String nombre, float precioSoles, float precioDolar, String descripcion, CategoriaEntity categoriaId) {
+    public ProductoDTO(String nombre, float precioSoles, float precioDolar, String descripcion, Long categoriaId) {
         this.nombre = nombre;
         this.precioSoles = precioSoles;
         this.precioDolar = precioDolar;
@@ -35,7 +35,7 @@ public class ProductoDTO implements Serializable {
         return descripcion;
     }
 
-    public CategoriaEntity getCategoriaId() {
+    public Long getCategoriaId() {
         return categoriaId;
     }
 }

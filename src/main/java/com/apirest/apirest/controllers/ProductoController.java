@@ -1,4 +1,5 @@
 package com.apirest.apirest.controllers;
+import com.apirest.apirest.dto.ProductoDTO;
 import com.apirest.apirest.entities.Producto;
 import com.apirest.apirest.repositories.ProductoRepository;
 import com.apirest.apirest.services.ProductoService;
@@ -24,13 +25,13 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public Producto obtenerProductoId(@PathVariable Long id){
+    public ProductoDTO obtenerProductoId(@PathVariable Long id){
         return productoService.obtenerProductoId(id);
     }
 
     @PostMapping
-    public Producto crearProducto(@RequestBody Producto producto){
-        return productoService.crearProducto(producto);
+    public Producto crearProducto(@RequestBody ProductoDTO productoDTO){
+        return productoService.crearProducto(productoDTO);
     }
 
     @PutMapping("/{id}")
