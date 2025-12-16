@@ -24,7 +24,7 @@ public class ProductoService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    public Producto crearProducto(ProductoDTO productoDTO){
+    public ProductoDTO crearProducto(ProductoDTO productoDTO){
         CategoriaEntity categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("No existe la categoría con id: " + productoDTO.getCategoriaId()));
 
@@ -35,7 +35,18 @@ public class ProductoService {
         producto.setDescripcion(productoDTO.getDescripcion());
         producto.setCategoria(categoria);
 
-        return productoRepository.save(producto);
+        producto =  productoRepository.save(producto);
+        return convertirADTO(producto);
+    }
+
+    private ProductoDTO convertirADTO(Producto producto) {
+        return new ProductoDTO(
+                producto.getNombre(),
+                producto.getPrecioSoles(),
+                producto.getPrecioDolar(),
+                producto.getDescripcion(),
+                producto.getCategoria().getId()
+        );
     }
 
     public List<Producto> obtenerProductos(){
